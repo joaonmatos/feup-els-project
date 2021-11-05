@@ -1,0 +1,51 @@
+[
+    {
+        "type": "import",
+        "source": {
+            "type": "xml",
+            "files": [
+                "vitis-report_1.xml",
+                "vitis-report_2.xml",
+                "vitis-report_3.xml"
+            ],
+            "elementName": "Resources",
+            "includeFileName": true
+        },
+        "target": "table"
+    },
+    {
+        "type": "apply",
+        "source": "table",
+        "target": "table",
+        "functions": [
+            {
+                "type": "rename",
+                "from": "BRAM_18K",
+                "to": "BRAM"
+            },
+            {
+                "type": "rename",
+                "from": "DSP48E",
+                "to": "DSP"
+            },
+            {
+                "type": "select",
+                "columns": [
+                    "File",
+                    "LUT",
+                    "FF",
+                    "DSP",
+                    "BRAM"
+                ]
+            }
+        ]
+    },
+    {
+        "type": "export",
+        "source": "table",
+        "target": {
+            "type": "csv",
+            "file": "out.csv"
+        }
+    }
+]
