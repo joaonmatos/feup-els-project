@@ -20,6 +20,7 @@ dependencies {
     testImplementation "junit:junit:4.11" 	
 
 	//! Add your dependencies here    
+   implementation "com.fasterxml.jackson.core:jackson-databind:2.13.0"
 }
 
 // Add JARs in folder 'libs' as dependencies

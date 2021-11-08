@@ -1,6 +1,6 @@
 [
     {
-        "type": "import",
+        "command": "import",
         "source": {
             "type": "xml",
             "files": [
@@ -14,22 +14,22 @@
         "target": "table"
     },
     {
-        "type": "apply",
+        "command": "transform",
         "source": "table",
         "target": "table",
         "functions": [
             {
-                "type": "rename",
+                "function": "rename",
                 "from": "BRAM_18K",
                 "to": "BRAM"
             },
             {
-                "type": "rename",
+                "function": "rename",
                 "from": "DSP48E",
                 "to": "DSP"
             },
             {
-                "type": "select",
+                "function": "select",
                 "columns": [
                     "File",
                     "LUT",
@@ -41,7 +41,7 @@
         ]
     },
     {
-        "type": "export",
+        "command": "export",
         "source": "table",
         "target": {
             "type": "csv",

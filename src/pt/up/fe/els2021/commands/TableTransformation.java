@@ -1,12 +1,13 @@
-package pt.up.fe.els2021.interpreter;
+package pt.up.fe.els2021.commands;
 
 import java.util.List;
 import java.util.Map;
 
-import pt.up.fe.els2021.model.Table;
-import pt.up.fe.els2021.model.interfaces.TableFunction;
+import pt.up.fe.els2021.Command;
+import pt.up.fe.els2021.Table;
+import pt.up.fe.els2021.functions.TableFunction;
 
-public record FunctionApplication(String source, String target, List<TableFunction> functions) implements Command {
+public record TableTransformation(String source, String target, List<TableFunction> functions) implements Command {
 
     @Override
     public void apply(Map<String, Table> programState) {

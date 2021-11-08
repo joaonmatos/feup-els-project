@@ -1,4 +1,4 @@
-package pt.up.fe.els2021.model;
+package pt.up.fe.els2021;
 
 import java.util.List;
 

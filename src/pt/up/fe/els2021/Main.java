@@ -1,18 +1,19 @@
 package pt.up.fe.els2021;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
 
-import pt.up.fe.els2021.interpreter.Command;
-import pt.up.fe.els2021.interpreter.Program;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Main {
 
-	public static void main(String[] args) {
-		// System.out.println("Hello");
+	public static void main(String[] args) throws Exception {
+		if (args.length != 1)
+			System.exit(1);
 
-		var p = new Program();
-		List<Command> commands = new ArrayList<>();
-		p.run(commands);
+		var config = new File(args[0]);
+		var jsonMapper = new ObjectMapper();
+
+		var program = jsonMapper.readValue(config, Program.class);
+		System.out.println(program);
 	}
 }
