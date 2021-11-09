@@ -4,6 +4,8 @@ import java.io.File;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import pt.up.fe.els2021.sources.XmlSource;
+
 public class Main {
 
 	public static void main(String[] args) throws Exception {
@@ -15,5 +17,6 @@ public class Main {
 
 		var program = jsonMapper.readValue(config, Program.class);
 		System.out.println(program);
+		program.run();
 	}
 }
