@@ -2,11 +2,26 @@ package pt.up.fe.els2021;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public record Program(@JsonValue List<Command> commands) implements Runnable {
+public final class Program implements Runnable {
+
+    private List<Command> commands;
+
+    @JsonCreator
+    Program(List<Command> commands) {
+        this.commands = commands;
+    }
+
+    @JsonValue
+    public List<Command> getCommands() {
+        return commands;
+    }
+
     @Override
     public void run() {
         var state = new HashMap<String, Table>();
@@ -15,8 +30,26 @@ public record Program(@JsonValue List<Command> commands) implements Runnable {
         }
     }
 
-    @JsonCreator
-    public static Program newProgram(List<Command> commands) {
-        return new Program(commands);
+    @Override
+    public String toString() {
+        return "Program[commands=" + commands + "]";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (o instanceof Program p) {
+            return Objects.equals(commands, p.commands);
+        } else
+            return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(commands);
+    }
+
 }
