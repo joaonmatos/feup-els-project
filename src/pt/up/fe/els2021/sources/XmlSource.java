@@ -26,7 +26,7 @@ public record XmlSource(List<String> files, String elementName, boolean includeF
 
         for (String file : files) {
             // get wanted element
-            File f = new File("examples/checkpoint1/" + file);
+            File f = new File(file);
             Document root = SpecsXml.getXmlRoot(f);
             Element xml = SpecsXml.getElement(root.getDocumentElement(), elementName);
             List<Element> xmlCollumns = SpecsXml.getElementChildren(xml);
