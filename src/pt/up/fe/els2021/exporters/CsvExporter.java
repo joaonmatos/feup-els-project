@@ -17,12 +17,11 @@ public record CsvExporter(String file) implements TableExporter {
         try {
             System.out.println("x");
             writer = new CSVWriter(new FileWriter(file));
-             // feed in your array (or convert your data to an array)
-            writer.writeNext(table.columnNames().toArray(new String[0]));
-            // for (List<String> col : table.columns()) {
-            //     writer.writeNext(col.toArray(new String[0]));
-            // }
+            writer.writeNext(table.columnNames().toArray(new String[0])); // Write header into csv
+
             List<List<String>> lines = new ArrayList<>(); 
+
+            // Convert columns to rows :C
             for (int i = 0; i < table.columns().get(0).size(); i++) {
                 List<String> aux = new ArrayList<>();
                 for (List<String> column : table.columns()) {
@@ -30,6 +29,8 @@ public record CsvExporter(String file) implements TableExporter {
                 }
                 lines.add(aux);
             }
+
+            // Write rows to csv
             for (List<String> row : lines) {
                 writer.writeNext(row.toArray(new String[0]));
             }
