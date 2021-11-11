@@ -5,11 +5,10 @@
             "type": "xml",
             "files": [
                 "vitis-report_1.xml",
-                "vitis-report_2.xml",
                 "vitis-report_3.xml"
             ],
-            "elementName": "Resources",
-            "includeFileName": true
+            "elementName": "AvailableResources",
+            "includeFileName": false
         },
         "target": "table"
     },
@@ -21,7 +20,7 @@
             {
                 "function": "rename",
                 "from": "BRAM_18K",
-                "to": "BRAM"
+                "to": "BRAM2"
             },
             {
                 "function": "rename",
@@ -31,11 +30,10 @@
             {
                 "function": "select",
                 "columns": [
-                    "File",
                     "LUT",
-                    "FF",
                     "DSP",
-                    "BRAM"
+                    "FF",
+                    "BRAM2"
                 ]
             }
         ]
@@ -45,7 +43,7 @@
         "source": "table",
         "target": {
             "type": "csv",
-            "file": "out.csv"
+            "file": "out1.csv"
         }
     }
 ]
