@@ -15,6 +15,7 @@ public class Main {
 
 		var program = jsonMapper.readValue(config, Program.class);
 		System.out.println(program);
+		program.run();
 
 		if (args.length == 2)
 			jsonMapper.writeValue(new File(args[1]), program);
