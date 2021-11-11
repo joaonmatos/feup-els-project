@@ -17,9 +17,8 @@ public record SelectFunction(@JsonProperty("columns") List<String> columnNames) 
             columnIndices.put(name, i);
         }
 
-        var newColumns = columnNames.stream().map(columnName -> {
-            return table.columns().get(columnIndices.get(columnName));
-        }).toList();
+        var newColumns = columnNames.stream().map(columnName -> table.columns().get(columnIndices.get(columnName)))
+                .toList();
 
         return new Table(columnNames, newColumns);
     }
