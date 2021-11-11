@@ -14,7 +14,6 @@ public class Main {
 		var jsonMapper = new ObjectMapper();
 
 		var program = jsonMapper.readValue(config, Program.class);
-		System.out.println(program);
 		program.run();
 
 		if (args.length == 2)

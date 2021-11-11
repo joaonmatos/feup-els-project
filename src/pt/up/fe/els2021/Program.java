@@ -5,10 +5,9 @@ import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public final class Program implements Runnable {
+public final class Program {
 
     private List<Command> commands;
 
@@ -22,8 +21,7 @@ public final class Program implements Runnable {
         return commands;
     }
 
-    @Override
-    public void run() {
+    public void run() throws Exception {
         var state = new HashMap<String, Table>();
         for (var command : commands) {
             command.apply(state);

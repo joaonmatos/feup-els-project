@@ -11,5 +11,5 @@ import pt.up.fe.els2021.Table;
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY, property = "type")
 @JsonSubTypes({ @Type(value = XmlSource.class, name = "xml") })
 public interface TableSource {
-    Table getTable();
+    Table getTable() throws Exception;
 }

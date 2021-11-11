@@ -8,13 +8,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import pt.up.fe.els2021.Table;
-import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsXml;
 
 public record XmlSource(List<String> files, String elementName, boolean includeFileName) implements TableSource {
 
     @Override
-    public Table getTable() {
+    public Table getTable() throws Exception {
         // initiating tables and first columnName
         List<String> columnNames = new ArrayList<>();
         List<List<String>> columns = new ArrayList<>();
@@ -26,48 +25,38 @@ public record XmlSource(List<String> files, String elementName, boolean includeF
         }
 
         for (String file : files) {
-            try {
-                // get wanted element
-                File f = new File("examples/checkpoint1/" + file);
-                Document root = SpecsXml.getXmlRoot(f);
-                Element xml = SpecsXml.getElement(root.getDocumentElement(), elementName);
-                List<Element> xmlCollumns = SpecsXml.getElementChildren(xml);
+            // get wanted element
+            File f = new File("examples/checkpoint1/" + file);
+            Document root = SpecsXml.getXmlRoot(f);
+            Element xml = SpecsXml.getElement(root.getDocumentElement(), elementName);
+            List<Element> xmlCollumns = SpecsXml.getElementChildren(xml);
 
-                // Initializing the columns List according to the number of elements
-                // in the wanted element
-                if (columns.isEmpty()) {
-                    for (int i = 0; i < xmlCollumns.size() + 1; i++) {
-                        columns.add(new ArrayList<>());
-                    }
+            // Initializing the columns List according to the number of elements
+            // in the wanted element
+            if (columns.isEmpty()) {
+                for (int i = 0; i < xmlCollumns.size() + 1; i++) {
+                    columns.add(new ArrayList<>());
                 }
+            }
 
-                // Add the first column -> filename
-                if (includeFileName) {
-                    columns.get(0).add(file);
-                }
+            // Add the first column -> filename
+            if (includeFileName) {
+                columns.get(0).add(file);
+            }
 
-                // looping throw the elements and adding into column names and the columns.
-                // If it starts at one we are including a file column
-                for (int i = 0; i < xmlCollumns.size(); i++) {
+            // looping throw the elements and adding into column names and the columns.
+            // If it starts at one we are including a file column
+            for (int i = 0; i < xmlCollumns.size(); i++) {
 
-                    Element el = xmlCollumns.get(i);
+                Element el = xmlCollumns.get(i);
 
-                    // Add the collumn name only once
-                    if (!columnNames.contains(el.getNodeName()))
-                        columnNames.add(el.getNodeName());
+                // Add the collumn name only once
+                if (!columnNames.contains(el.getNodeName()))
+                    columnNames.add(el.getNodeName());
 
-                    columns.get(i + startIndex).add(el.getTextContent());
-                }
-            } catch (ArrayIndexOutOfBoundsException e) {
-                // um ficheiro pode ter um numero diferente de colunas
-                // ou outra forma de avisar o utilizador
-                SpecsLogs.warn("Error importing file: OOB " + file);
-            } catch (RuntimeException e) {
-                // ou outra forma de avisar o utilizador
-                SpecsLogs.warn("Error importing file: RTE " + file);
+                columns.get(i + startIndex).add(el.getTextContent());
             }
         }
-        System.out.println(columnNames + " " + columns);
         return new Table(columnNames, columns);
     }
 

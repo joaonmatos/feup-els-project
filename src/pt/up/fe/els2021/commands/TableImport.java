@@ -9,7 +9,7 @@ import pt.up.fe.els2021.sources.TableSource;
 public record TableImport(TableSource source, String target) implements Command {
 
     @Override
-    public void apply(Map<String, Table> programState) {
+    public void apply(Map<String, Table> programState) throws Exception {
         programState.put(target, source.getTable());
     }
 }

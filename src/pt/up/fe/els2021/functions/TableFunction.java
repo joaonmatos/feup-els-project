@@ -12,5 +12,5 @@ import pt.up.fe.els2021.Table;
 @JsonSubTypes({ @Type(value = RenameFunction.class, name = "rename"),
         @Type(value = SelectFunction.class, name = "select") })
 public interface TableFunction {
-    Table apply(Table table);
+    Table apply(Table table) throws Exception;
 }

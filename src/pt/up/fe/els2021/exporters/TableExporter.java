@@ -11,5 +11,5 @@ import pt.up.fe.els2021.Table;
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY, property = "type")
 @JsonSubTypes({ @Type(value = CsvExporter.class, name = "csv") })
 public interface TableExporter {
-    void exportTable(Table table);
+    void exportTable(Table table) throws Exception;
 }

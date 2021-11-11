@@ -17,5 +17,5 @@ import pt.up.fe.els2021.commands.TableTransformation;
         @Type(value = TableTransformation.class, name = "transform"),
         @Type(value = TableExport.class, name = "export") })
 public interface Command {
-    void apply(Map<String, Table> programState);
+    void apply(Map<String, Table> programState) throws Exception;
 }
