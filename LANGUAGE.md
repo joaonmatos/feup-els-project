@@ -5,6 +5,8 @@ simple I/O mechanisms.
 
 As for the input there is **.json config file** where the operations are set. The file should contain an array with the operations (objects) that you wish to apply.
 
+This objects are all commands, which all have a source and a target. We have 3 different types of commands, a import command to read a specific element in a file and create a table, a export command to load our variables to a file and a transform command which applies operations on these variables(tables).
+
 The first type of operation you can do is load a table from a file (import):
 
 > To get table `X`, import element `Y` from XML files `A`, `B`, and `C`
@@ -32,6 +34,8 @@ The second type of operation you can do is create a new table as a function of e
 
 > To get table `X`, apply functions `rename(A, B)`, `rename(C, D)`, and `select(B, E, D)` to table
 > `Y`
+
+In this transform command we specify the source table and the target, and provide a array of functions which are the operations to be applied to the different tables.
 
 For this example the config file should follow this format:
 
@@ -78,8 +82,13 @@ For the config file, this example translates to the following JSON object:
 }
 ```
 
-The language to configure this system is, therefore, a sequence of commands which assign imports or
-expressions to variables or export variables.
+The language to configure this system is, therefore, a sequence of commands which assign imports or expressions to variables or export variables.
+
+Basically our program has a list of commands which it applies on this variables that are in the form of tables.
+
+At this moment the program supports reading a config file only in JSON format and can only export the tables to a csv.
+
+
 
 ## Reasoning
 
