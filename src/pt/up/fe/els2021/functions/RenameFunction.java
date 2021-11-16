@@ -18,4 +18,8 @@ public record RenameFunction(@JsonProperty("from") String columnName, @JsonPrope
         return new Table(newColumnNames, table.columns());
     }
 
+    @Override
+    public String toString() {
+        return "Rename column \"" + columnName + "\" to \"" + newColumnName + "\"";
+    }
 }

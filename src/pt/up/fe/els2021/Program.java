@@ -1,15 +1,15 @@
 package pt.up.fe.els2021;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-
 public final class Program {
 
-    private List<Command> commands;
+    private final List<Command> commands;
 
     @JsonCreator
     Program(List<Command> commands) {
@@ -17,7 +17,7 @@ public final class Program {
     }
 
     @JsonValue
-    public List<Command> getCommands() {
+    public List<Command> commands() {
         return commands;
     }
 
@@ -30,7 +30,16 @@ public final class Program {
 
     @Override
     public String toString() {
-        return "Program[commands=" + commands + "]";
+        if (commands.isEmpty()) {
+            return "Program { Empty }";
+        }
+        var builder = new StringBuilder("Program {\n");
+        builder.append("  ").append(commands.size()).append(" commands:\n");
+        for (var command : commands) {
+            var strCommand = command.toString();
+            builder.append(" -").append(strCommand.indent(2));
+        }
+        return builder.append("}").toString();
     }
 
     @Override

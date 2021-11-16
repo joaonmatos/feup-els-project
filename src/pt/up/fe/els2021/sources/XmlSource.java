@@ -13,7 +13,19 @@ import pt.up.fe.specs.util.SpecsXml;
 public record XmlSource(List<String> files, String elementName, boolean includeFileName) implements TableSource {
 
     @Override
-    public Table getTable() throws Exception {
+    public String toString() {
+        var builder = new StringBuilder("Xml Source {\n");
+        builder.append("  Extracting element \"").append(elementName).append("\"\n");
+        builder.append("  Include file names in table: ").append(includeFileName ? "yes" : "no").append("\n");
+        builder.append("  Files:\n");
+        for (var file : files) {
+            builder.append(" - \"").append(file).append("\"\n");
+        }
+        return builder.append("}").toString();
+    }
+
+    @Override
+    public Table getTable() {
         // initiating tables and first columnName
         List<String> columnNames = new ArrayList<>();
         List<List<String>> columns = new ArrayList<>();
@@ -59,5 +71,6 @@ public record XmlSource(List<String> files, String elementName, boolean includeF
         }
         return new Table(columnNames, columns);
     }
+
 
 }

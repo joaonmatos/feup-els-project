@@ -23,4 +23,15 @@ public record SelectFunction(@JsonProperty("columns") List<String> columnNames) 
         return new Table(columnNames, newColumns);
     }
 
+    @Override
+    public String toString() {
+        if (columnNames.isEmpty()) {
+            return "Select 0 columns";
+        }
+        var builder = new StringBuilder("Select ").append(columnNames.size()).append(" columns:\n");
+        for (var name : columnNames) {
+            builder.append(" - \"").append(name).append("\"\n");
+        }
+        return builder.toString();
+    }
 }

@@ -21,4 +21,8 @@ public record CsvExporter(String file) implements TableExporter {
         writer.close();
     }
 
+    @Override
+    public String toString() {
+        return "CsvExporter { Export to file: \"" + file + "\" }";
+    }
 }

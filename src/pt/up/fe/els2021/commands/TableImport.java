@@ -12,4 +12,12 @@ public record TableImport(TableSource source, String target) implements Command 
     public void apply(Map<String, Table> programState) throws Exception {
         programState.put(target, source.getTable());
     }
+
+    @Override
+    public String toString() {
+        return "Import {\n" +
+                "  Name of new table: \"" + target + "\"\n" +
+                "  Source:" + source.toString().indent(2) +
+                "}";
+    }
 }

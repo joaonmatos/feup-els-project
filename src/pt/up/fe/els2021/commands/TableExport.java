@@ -13,4 +13,11 @@ public record TableExport(String source, TableExporter target) implements Comman
         target.exportTable(programState.get(source));
     }
 
+    @Override
+    public String toString() {
+        return "Export {\n" +
+                "  Exported table: \"" + source + "\"\n" +
+                "  Exporter:" + target.toString().indent(2) +
+                "}";
+    }
 }
