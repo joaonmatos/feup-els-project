@@ -1,22 +1,22 @@
 package pt.up.fe.els2021;
 
-import java.io.File;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
 
 public class Main {
 
-	public static void main(String[] args) throws Exception {
-		if (args.length != 1 && args.length != 2)
-			System.exit(1);
+    public static void main(String[] args) throws Exception {
+        if (args.length != 1)
+            System.exit(1);
 
-		var config = new File(args[0]);
-		var jsonMapper = new ObjectMapper();
+        var config = new File(args[0]);
+        var jsonMapper = JsonMapper.builder()
+                .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true)
+                .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true).build();
 
-		var program = jsonMapper.readValue(config, Program.class);
-		program.run();
-
-		if (args.length == 2)
-			jsonMapper.writeValue(new File(args[1]), program);
-	}
+        var program = jsonMapper.readValue(config, Program.class);
+        program.run();
+    }
 }

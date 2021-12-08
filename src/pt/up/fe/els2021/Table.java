@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 public record Table(List<String> columnNames,
                     List<List<String>> columns) {
 
-    public int getSize() {
+    public int rowCount() {
         if (columns.isEmpty())
             return 0;
 
@@ -16,7 +16,7 @@ public record Table(List<String> columnNames,
     }
 
     public Stream<List<String>> rowStream() {
-        var size = getSize();
+        var size = rowCount();
         if (size == 0)
             return Stream.empty();
 
@@ -24,26 +24,26 @@ public record Table(List<String> columnNames,
     }
 
     public Optional<List<String>> getRow(int index) {
-        if (index < 0 || index >= getSize())
+        if (index < 0 || index >= rowCount())
             return Optional.empty();
 
         return Optional.of(columns.stream().map(col -> col.get(index)).toList());
     }
 
-    @Override
-    public String toString() {
-        if (columnNames.isEmpty()) {
-            return "Table { Empty }";
-        }
-
-        var builder = new StringBuilder("Table {\n");
-        builder.append("  ").append(columnNames.size()).append("columns:\n");
-        for (var name : columnNames) {
-            builder.append(" - ").append(name).append("\n");
-        }
-        builder.append("  ").append(getSize()).append(" rows\n");
-        builder.append("}");
-        return builder.toString();
-    }
+//    @Override
+//    public String toString() {
+//        if (columnNames.isEmpty()) {
+//            return "Table { Empty }";
+//        }
+//
+//        var builder = new StringBuilder("Table {\n");
+//        builder.append("  ").append(columnNames.size()).append("columns:\n");
+//        for (var name : columnNames) {
+//            builder.append(" - ").append(name).append("\n");
+//        }
+//        builder.append("  ").append(rowCount()).append(" rows\n");
+//        builder.append("}");
+//        return builder.toString();
+//    }
 
 }

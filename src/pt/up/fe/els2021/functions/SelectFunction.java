@@ -1,11 +1,11 @@
 package pt.up.fe.els2021.functions;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import pt.up.fe.els2021.Table;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import pt.up.fe.els2021.Table;
 
 public record SelectFunction(@JsonProperty("columns") List<String> columnNames) implements TableFunction {
 
@@ -23,15 +23,18 @@ public record SelectFunction(@JsonProperty("columns") List<String> columnNames) 
         return new Table(columnNames, newColumns);
     }
 
-    @Override
-    public String toString() {
-        if (columnNames.isEmpty()) {
-            return "Select 0 columns";
+    public static final class Builder extends TableFunction.Builder {
+        List<String> columns = new ArrayList<>();
+
+        @Override
+        public TableFunction build() {
+            return new SelectFunction(columns);
         }
-        var builder = new StringBuilder("Select ").append(columnNames.size()).append(" columns:\n");
-        for (var name : columnNames) {
-            builder.append(" - \"").append(name).append("\"\n");
+
+        public Builder column(String column) {
+            columns.add(column);
+            return this;
         }
-        return builder.toString();
+
     }
 }

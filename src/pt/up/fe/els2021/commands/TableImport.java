@@ -1,23 +1,14 @@
 package pt.up.fe.els2021.commands;
 
-import java.util.Map;
-
-import pt.up.fe.els2021.Command;
 import pt.up.fe.els2021.Table;
 import pt.up.fe.els2021.sources.TableSource;
+
+import java.util.Map;
 
 public record TableImport(TableSource source, String target) implements Command {
 
     @Override
     public void apply(Map<String, Table> programState) throws Exception {
-        programState.put(target, source.getTable());
-    }
-
-    @Override
-    public String toString() {
-        return "Import {\n" +
-                "  Name of new table: \"" + target + "\"\n" +
-                "  Source:" + source.toString().indent(2) +
-                "}";
+        programState.put(target, source.importTable());
     }
 }

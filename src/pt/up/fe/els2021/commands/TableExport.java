@@ -1,10 +1,9 @@
 package pt.up.fe.els2021.commands;
 
-import java.util.Map;
-
-import pt.up.fe.els2021.Command;
 import pt.up.fe.els2021.Table;
 import pt.up.fe.els2021.exporters.TableExporter;
+
+import java.util.Map;
 
 public record TableExport(String source, TableExporter target) implements Command {
 
@@ -13,11 +12,4 @@ public record TableExport(String source, TableExporter target) implements Comman
         target.exportTable(programState.get(source));
     }
 
-    @Override
-    public String toString() {
-        return "Export {\n" +
-                "  Exported table: \"" + source + "\"\n" +
-                "  Exporter:" + target.toString().indent(2) +
-                "}";
-    }
 }

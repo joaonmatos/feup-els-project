@@ -1,76 +1,85 @@
 package pt.up.fe.els2021.sources;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+// import java.io.File;
+// import java.nio.file.Paths;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.w3c.dom.NodeList;
 import pt.up.fe.els2021.Table;
 import pt.up.fe.specs.util.SpecsXml;
 
-public record XmlSource(List<String> files, String elementName, boolean includeFileName) implements TableSource {
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-    @Override
-    public String toString() {
-        var builder = new StringBuilder("Xml Source {\n");
-        builder.append("  Extracting element \"").append(elementName).append("\"\n");
-        builder.append("  Include file names in table: ").append(includeFileName ? "yes" : "no").append("\n");
-        builder.append("  Files:\n");
-        for (var file : files) {
-            builder.append(" - \"").append(file).append("\"\n");
-        }
-        return builder.append("}").toString();
+public final class XmlSource extends TableSource {
+
+    private final String xpath;
+
+    @JsonCreator
+    public XmlSource(
+            @JsonProperty("includes") Map<Include, String> includes,
+            @JsonProperty("files") List<String> files,
+            @JsonProperty("path") String xpath
+    ) {
+        super(includes, files);
+        this.xpath = xpath;
     }
 
     @Override
-    public Table getTable() {
-        // initiating tables and first columnName
-        List<String> columnNames = new ArrayList<>();
-        List<List<String>> columns = new ArrayList<>();
+    protected Table getFileTable(String fileContent) throws Exception {
 
-        int startIndex = 0;
-        if (includeFileName) {
-            columnNames.add("File");
-            startIndex = 1;
-        }
+        var columnNames = new LinkedHashMap<String, Integer>();
+        var columns = new ArrayList<List<String>>();
+        // get wanted element
+        var root = SpecsXml.getXmlRoot(fileContent);
+        var xpath = XPathFactory.newInstance().newXPath();
+        var foundNodes = (NodeList) xpath.compile(this.xpath).evaluate(root, XPathConstants.NODESET);
 
-        for (String file : files) {
-            // get wanted element
-            File f = new File(file);
-            Document root = SpecsXml.getXmlRoot(f);
-            Element xml = SpecsXml.getElement(root.getDocumentElement(), elementName);
-            List<Element> xmlCollumns = SpecsXml.getElementChildren(xml);
+        for (int nodeIx = 0; nodeIx < foundNodes.getLength(); nodeIx++) {
+            var xml = foundNodes.item(nodeIx);
+            var xmlColumns = xml.getChildNodes();
 
-            // Initializing the columns List according to the number of elements
-            // in the wanted element
-            if (columns.isEmpty()) {
-                for (int i = 0; i < xmlCollumns.size() + 1; i++) {
+            int latestTableColumnIx = 0;
+            // Read values from elements' children and put them in the respective column
+            for (int elementIx = 0; elementIx < xmlColumns.getLength(); elementIx++) {
+
+                var el = xmlColumns.item(elementIx);
+                var elementName = el.getNodeName();
+                if (elementName.equals("#text")) continue;
+                var content = el.getTextContent();
+
+                if (!columnNames.containsKey(elementName)) {
+                    columnNames.put(elementName, latestTableColumnIx++);
                     columns.add(new ArrayList<>());
+                    // when new attribute is found populate column for previous nodes
+                    for (var ignored = 0; ignored < nodeIx; ignored++)
+                        columns.get(latestTableColumnIx).add(null);
                 }
-            }
 
-            // Add the first column -> filename
-            if (includeFileName) {
-                columns.get(0).add(file);
-            }
-
-            // looping throw the elements and adding into column names and the columns.
-            // If it starts at one we are including a file column
-            for (int i = 0; i < xmlCollumns.size(); i++) {
-
-                Element el = xmlCollumns.get(i);
-
-                // Add the collumn name only once
-                if (!columnNames.contains(el.getNodeName()))
-                    columnNames.add(el.getNodeName());
-
-                columns.get(i + startIndex).add(el.getTextContent());
+                columns.get(columnNames.get(elementName)).add(content);
             }
         }
-        return new Table(columnNames, columns);
+
+        return new Table(List.copyOf(columnNames.keySet()), columns);
     }
 
+    public static final class Builder extends TableSource.Builder {
+        private final String xpath;
+
+        public Builder(String xpath) {
+            this.xpath = xpath;
+        }
+
+
+        @Override
+        public TableSource build() {
+            return new XmlSource(includes, files, xpath);
+        }
+    }
 
 }
