@@ -1,51 +1,51 @@
 [
-    {
-        "command": "import",
-        "source": {
-            "type": "xml",
-            "files": [
-                "vitis-report_1.xml",
-                "vitis-report_2.xml",
-                "vitis-report_3.xml"
-            ],
-            "elementName": "Resources",
-            "includeFileName": true
-        },
-        "target": "table"
+  {
+    "command": "import",
+    "source": {
+      "adapter": "xml",
+      "files": [
+        "**/examples/checkpoint1/vitis-report_*.xml"
+      ],
+      "path": "//Resources[1]",
+      "includes": {
+        "filename": "File"
+      }
     },
-    {
-        "command": "transform",
-        "source": "table",
-        "target": "table",
-        "functions": [
-            {
-                "function": "rename",
-                "from": "BRAM_18K",
-                "to": "BRAM"
-            },
-            {
-                "function": "rename",
-                "from": "DSP48E",
-                "to": "DSP"
-            },
-            {
-                "function": "select",
-                "columns": [
-                    "File",
-                    "LUT",
-                    "FF",
-                    "DSP",
-                    "BRAM"
-                ]
-            }
+    "target": "table"
+  },
+  {
+    "command": "transform",
+    "source": "table",
+    "target": "table",
+    "functions": [
+      {
+        "function": "rename",
+        "from": "BRAM_18K",
+        "to": "BRAM"
+      },
+      {
+        "function": "rename",
+        "from": "DSP48E",
+        "to": "DSP"
+      },
+      {
+        "function": "select",
+        "columns": [
+          "File",
+          "LUT",
+          "FF",
+          "DSP",
+          "BRAM"
         ]
-    },
-    {
-        "command": "export",
-        "source": "table",
-        "target": {
-            "type": "csv",
-            "file": "out0.csv"
-        }
+      }
+    ]
+  },
+  {
+    "command": "export",
+    "source": "table",
+    "target": {
+      "type": "csv",
+      "file": "out0.csv"
     }
+  }
 ]

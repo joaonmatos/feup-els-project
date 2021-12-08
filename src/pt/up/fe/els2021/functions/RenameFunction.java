@@ -1,11 +1,19 @@
 package pt.up.fe.els2021.functions;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import pt.up.fe.els2021.Table;
 
-public record RenameFunction(@JsonProperty("from") String columnName, @JsonProperty("to") String newColumnName)
+public final class RenameFunction
         implements TableFunction {
+    private final String columnName;
+    private final String newColumnName;
+
+    @JsonCreator
+    public RenameFunction(@JsonProperty("from") String columnName, @JsonProperty("to") String newColumnName) {
+        this.columnName = columnName;
+        this.newColumnName = newColumnName;
+    }
 
     @Override
     public Table apply(Table table) {
@@ -18,8 +26,4 @@ public record RenameFunction(@JsonProperty("from") String columnName, @JsonPrope
         return new Table(newColumnNames, table.columns());
     }
 
-    @Override
-    public String toString() {
-        return "Rename column \"" + columnName + "\" to \"" + newColumnName + "\"";
-    }
 }
