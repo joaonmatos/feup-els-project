@@ -14,9 +14,10 @@ import java.util.*;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "adapter")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = JsonSource.class, name = "json"),
-        @JsonSubTypes.Type(value = XmlSource.class, name = "xml")
+        @JsonSubTypes.Type(value = XmlSource.class, name = "xml"),
+        @JsonSubTypes.Type(value = TxtSource.class, name = "txt")
 })
-public sealed abstract class TableSource permits JsonSource, XmlSource {
+public sealed abstract class TableSource permits JsonSource, XmlSource, TxtSource {
     private final Map<Include, String> includes;
     private final List<String> files;
 
@@ -108,7 +109,7 @@ public sealed abstract class TableSource permits JsonSource, XmlSource {
         PATH
     }
 
-    public static sealed abstract class Builder permits JsonSource.Builder, XmlSource.Builder {
+    public static sealed abstract class Builder permits JsonSource.Builder, XmlSource.Builder, TxtSource.Builder {
         protected final List<String> files = new ArrayList<>();
         protected final Map<Include, String> includes = new HashMap<>();
 
