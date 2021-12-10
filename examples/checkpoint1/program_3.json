@@ -2,19 +2,19 @@
   {
     "command": "import",
     "source": {
-      "adapter": "txt",
+      "adapter": "text",
       "files": [
         "**/examples/checkpoint1/gprof.txt"
       ],
       "includes": {
         "filename": "File"
       },
-      "startToken":"%",
-      "endToken":"matrix_mulv3_tdtdptd",
-      "height":"1",
-      "width":"7",
-      "headerSize":"2",
-      "separator":" "
+      "startToken": "%",
+      "endToken": "matrix_mulv3_tdtdptd",
+      "height": "1",
+      "width": "7",
+      "headerSize": "2",
+      "separator": " "
     },
     "target": "table"
   },

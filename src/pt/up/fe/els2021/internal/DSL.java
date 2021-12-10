@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DSL {
-    public static Transformation.Builder transform(Table source) {
-        return new Transformation.Builder(source);
+    public static Transformation.Builder transform() {
+        return new Transformation.Builder();
     }
 
     public static Combination.Builder combine(TableCombinator combinator) {
@@ -100,12 +100,7 @@ public class DSL {
 
 
         public static class Builder {
-            private final Table source;
             private final List<TableFunction> functions = new ArrayList<>();
-
-            public Builder(Table source) {
-                this.source = source;
-            }
 
             public Builder withFunction(TableFunction function) {
                 functions.add(function);
@@ -116,11 +111,11 @@ public class DSL {
                 return this.withFunction(builder.build());
             }
 
-            public Table getResult() throws Exception {
-                return build().getResult();
+            public Table getResult(Table source) throws Exception {
+                return build(source).getResult();
             }
 
-            public Transformation build() {
+            public Transformation build(Table source) {
                 return new Transformation(source, functions);
             }
         }

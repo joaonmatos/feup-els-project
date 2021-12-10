@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import pt.up.fe.els2021.Table;
 
-public final class TxtSource extends TableSource {
+public final class TextSource extends TableSource {
 
     private final String startToken;
     private final String endToken;
@@ -19,7 +19,7 @@ public final class TxtSource extends TableSource {
     private final String separator;
 
     @JsonCreator
-    public TxtSource(
+    public TextSource(
             @JsonProperty("includes") Map<Include, String> includes,
             @JsonProperty("files") List<String> files,
             @JsonProperty("startToken") String beg,
@@ -44,52 +44,45 @@ public final class TxtSource extends TableSource {
         return parser(fileContent);
     }
 
-    public Table parser(String fileContent) {
-        try {
-            Table result = null;
-            Reader inputString = new StringReader(fileContent);
-            BufferedReader reader = new BufferedReader(inputString);
-            String line;
-            ArrayList<List<String>> ficheiro = new ArrayList<>();
-            boolean firstLine = false, ending = false;
-            while ((line = reader.readLine()) != null) {
+    private Table parser(String fileContent) throws Exception {
+        try (var inputString = new StringReader(fileContent); var reader = new BufferedReader(inputString)) {
+            var iterator = reader.lines().iterator();
+            var file = new ArrayList<List<String>>();
+            var firstLine = false;
+            var ending = false;
+
+            while (iterator.hasNext()) {
+                var line = iterator.next();
 
                 if (!firstLine) {
                     if (line.trim().startsWith(this.startToken)) {
                         firstLine = true;
-                        ficheiro.add(Arrays.asList(line.trim().replaceAll(" +", " ").split(separator)));
+                        file.add(Arrays.asList(line.trim().replaceAll(" +", " ").split(separator)));
                     }
                 } else {
                     ending = line.endsWith(this.endToken);
-                    ficheiro.add(Arrays.asList(line.trim().replaceAll(" +", " ").split(separator)));
+                    file.add(Arrays.asList(line.trim().replaceAll(" +", " ").split(separator)));
 
                     if (ending) {
-                        if (checkTable(ficheiro, height, width, headersize)) {
-                            result = getColumns(ficheiro, headersize);
+                        if (checkTable(file, height, width, headersize)) {
+                            return getColumns(file, headersize);
                         } else {
                             firstLine = false;
-                            ending = false;
                         }
                     }
                 }
             }
-
-            reader.close();
-
-            return result;
-        } catch (Exception e) {
-            System.out.println(e);
-            return null;
+            throw new Exception("TextSource: did not find end of table");
         }
     }
 
-    public boolean checkTable(ArrayList<List<String>> table, int height, int widht, int header) {
+    public boolean checkTable(ArrayList<List<String>> table, int height, int width, int header) {
         if (table.size() < header + 1 || table.size() > height + header) {
             return false;
         }
 
-        for (List<String> line : table) {
-            if (line.size() > widht) {
+        for (var line : table) {
+            if (line.size() > width) {
                 return false;
             }
         }
@@ -98,9 +91,8 @@ public final class TxtSource extends TableSource {
 
     public Table getColumns(ArrayList<List<String>> table, int headerSize) {
 
-        List<List<String>> fileHeaders = table.subList(0, headerSize);
-        List<String> header = new ArrayList<String>();
-        fileHeaders.get(0).forEach(r -> header.add(r));
+        var fileHeaders = table.subList(0, headerSize);
+        var header = new ArrayList<>(fileHeaders.get(0));
 
         // merge header
         for (int i = 1; i < headerSize; i++) {
@@ -115,38 +107,32 @@ public final class TxtSource extends TableSource {
             }
         }
 
-        ArrayList<List<String>> newTable = new ArrayList<List<String>>() {
+        ArrayList<List<String>> newTable = new ArrayList<>() {
             {
                 add(header);
             }
         };
 
-        for (List<String> a : table.subList(2, table.size())) {
-            newTable.add(a);
-        }
+        newTable.addAll(table.subList(2, table.size()));
 
-        List<List<String>> fliped = flipTable(newTable.subList(1, newTable.size()));
+        var flipped = flipTable(newTable.subList(1, newTable.size()));
 
-        return new Table(newTable.get(0), fliped);
+        return new Table(newTable.get(0), flipped);
 
     }
 
     public List<List<String>> flipTable(List<List<String>> list) {
 
-        ArrayList<List<String>> newTable = new ArrayList<List<String>>();
+        var newTable = new ArrayList<List<String>>();
         for (int i = 0; i < list.get(0).size(); i++) {
-            newTable.add(new ArrayList<String>());
+            newTable.add(new ArrayList<>());
         }
-        System.out.println(newTable.toString());
 
         for (int i = 0; i < list.size(); i++) {
             for (int j = 0; j < list.get(i).size(); j++) {
-                System.out.println(i + " " + j);
                 newTable.get(j).add(list.get(i).get(j));
             }
         }
-
-        System.out.println(newTable.toString());
 
         return newTable;
     }
@@ -172,7 +158,7 @@ public final class TxtSource extends TableSource {
 
         @Override
         public TableSource build() {
-            return new TxtSource(includes, files, startToken, endToken, height, width, headersize, separator);
+            return new TextSource(includes, files, startToken, endToken, height, width, headersize, separator);
         }
     }
 
