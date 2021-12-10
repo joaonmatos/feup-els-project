@@ -7,6 +7,7 @@ import pt.up.fe.els2021.combinators.TableCombinator;
 import pt.up.fe.els2021.exporters.CsvExporter;
 import pt.up.fe.els2021.functions.*;
 import pt.up.fe.els2021.sources.JsonSource;
+import pt.up.fe.els2021.sources.TextSource;
 import pt.up.fe.els2021.sources.XmlSource;
 
 import java.util.ArrayList;
@@ -31,6 +32,19 @@ public class DSL {
 
         public static XmlSource.Builder xml(String xpath) {
             return new XmlSource.Builder(xpath);
+        }
+
+        public static TextSource.Builder text(
+                String startToken,
+                String endToken,
+                int height,
+                int width,
+                int headerSize,
+                String separator
+        ) {
+            return new TextSource.Builder(
+                    startToken, endToken, height, width, headerSize, separator
+            );
         }
     }
 
