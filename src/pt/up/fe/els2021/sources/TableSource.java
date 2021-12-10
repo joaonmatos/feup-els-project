@@ -72,7 +72,7 @@ public sealed abstract class TableSource permits JsonSource, XmlSource, TextSour
         var map = new HashMap<String, String>();
         var path = Paths.get(file);
         var fileName = path.getFileName().toString();
-        var folder = path.getParent().toString();
+        var folder = path.getParent().getFileName().toString();
 
         if (includes.containsKey(Include.FILENAME)) {
             map.put(includes.get(Include.FILENAME), fileName);

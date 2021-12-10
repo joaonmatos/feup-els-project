@@ -52,11 +52,11 @@ public class DSL {
         private Combinators() {
         }
 
-        public InnerJoinCombinator join(String joinColumn) {
+        public static InnerJoinCombinator join(String joinColumn) {
             return new InnerJoinCombinator(joinColumn);
         }
 
-        public MergeCombinator merge() {
+        public static MergeCombinator merge() {
             return new MergeCombinator();
         }
     }
@@ -92,6 +92,10 @@ public class DSL {
 
         public static TrimFunction.Builder trim() {
             return new TrimFunction.Builder();
+        }
+
+        public static MoveColumnFunction move(String column, int toIndex) {
+            return new MoveColumnFunction(column, toIndex);
         }
     }
 
