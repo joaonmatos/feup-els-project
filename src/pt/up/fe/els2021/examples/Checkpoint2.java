@@ -27,6 +27,11 @@ public class Checkpoint2 {
                 ).withFile("**/examples/checkpoint2/*/gprof.txt")
                 .withInclude(TableSource.Include.FOLDER, "Folder")
                 .importTable();
+        gprof = Functions.select()
+                .column("Folder")
+                .column("% time")
+                .column("name")
+                .build().apply(gprof);
 
         var combined = combine(Combinators.join("Folder"))
                 .withTable(vitisReports)
