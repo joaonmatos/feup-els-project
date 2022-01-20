@@ -2,43 +2,15 @@
   {
     "command": "import",
     "source": {
-      "adapter": "xml",
+      "adapter": "txt",
       "files": [
-        "**/examples/checkpoint1/vitis-report_*.xml"
+        "**/examples/checkpoint1/gprof.txt"
       ],
-      "path": "//Resources[1]",
       "includes": {
         "filename": "File"
       }
     },
     "target": "table"
-  },
-  {
-    "command": "transform",
-    "source": "table",
-    "target": "table",
-    "functions": [
-      {
-        "function": "rename",
-        "from": "BRAM_18K",
-        "to": "BRAM"
-      },
-      {
-        "function": "rename",
-        "from": "DSP48E",
-        "to": "DSP"
-      },
-      {
-        "function": "select",
-        "columns": [
-          "File",
-          "LUT",
-          "FF",
-          "DSP",
-          "BRAM"
-        ]
-      }
-    ]
   },
   {
     "command": "export",
