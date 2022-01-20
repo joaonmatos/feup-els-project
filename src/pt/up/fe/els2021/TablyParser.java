@@ -17,10 +17,7 @@ import pt.up.fe.els2021.tably.tably.impl.ProgramImpl;
 
 import javax.inject.Inject;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 public class TablyParser {
     @Inject
@@ -31,6 +28,11 @@ public class TablyParser {
     public TablyParser() {
         var injector = new TablyStandaloneSetup().createInjectorAndDoEMFRegistration();
         injector.injectMembers(this);
+    }
+
+    public void setExistingVariables(Collection<String> variables) {
+        existingVariables.clear();
+        existingVariables.addAll(variables);
     }
 
     public Program parse(Reader reader) throws Exception {
