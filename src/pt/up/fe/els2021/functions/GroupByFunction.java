@@ -44,9 +44,13 @@ public final class GroupByFunction implements TableFunction {
         var targetColumnIndex = table.columnNames().indexOf(columnName);
         var map = new HashMap<String, Table>();
         for (var rowIndex = 0; rowIndex < table.rowCount(); rowIndex++) {
-            var value = table.columnNames().get(targetColumnIndex);
+            var value = table.columns().get(targetColumnIndex).get(rowIndex);
             if (!map.containsKey(value)) {
-                map.put(value, new Table(table.columnNames(), new ArrayList<>()));
+                var innerColumns = new ArrayList<List<String>>();
+                for (var i = 0; i < table.columns().size(); i++) {
+                    innerColumns.add(new ArrayList<>());
+                }
+                map.put(value, new Table(table.columnNames(), innerColumns));
             }
             var innerTable = map.get(value);
             for (var columnIndex = 0; columnIndex < table.columns().size(); columnIndex++) {

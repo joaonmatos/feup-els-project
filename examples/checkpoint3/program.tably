@@ -35,6 +35,7 @@ texts = import "**/examples/checkpoint3/data/*/gprof.txt" {
 }
 
 texts = transform texts {
+    rename "% time" to "%"
     select "Folder" "name" "%"
     groupBy "Folder" in var out result {
         text1 = transform var {
@@ -65,11 +66,13 @@ joined = combine {
 }
 
 sums = transform joined {
+    exclude "Folder"
     aggregate sum
     addColumn "Folder" "Sum"
 }
 
 avgs = transform joined {
+    exclude "Folder"
     aggregate average
     addColumn "Folder" "Average"
 }
@@ -77,6 +80,10 @@ avgs = transform joined {
 final = combine {
     with merge
     tables joined sums avgs
+}
+
+final = transform final {
+    move "Folder" to 0
 }
 
 export final with csv "output.csv"

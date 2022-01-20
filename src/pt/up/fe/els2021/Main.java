@@ -3,7 +3,9 @@ package pt.up.fe.els2021;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 
 public class Main {
 
@@ -12,11 +14,10 @@ public class Main {
             System.exit(1);
 
         var config = new File(args[0]);
-        var jsonMapper = JsonMapper.builder()
-                .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true)
-                .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true).build();
+        var reader = new FileReader(config);
 
-        var program = jsonMapper.readValue(config, Program.class);
+        var parser = new TablyParser();
+        var program = parser.parse(reader);
         program.run();
     }
 }

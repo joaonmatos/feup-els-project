@@ -4,6 +4,7 @@ plugins {
 	id 'application'
  	id 'distribution'
 }
+applicationDefaultJvmArgs = ["--add-opens", "java.base/java.lang=ALL-UNNAMED"]
 
 
 // Java project
@@ -22,6 +23,7 @@ dependencies {
 	//! Add your dependencies here    
    implementation "com.fasterxml.jackson.core:jackson-databind:2.13.0"
    implementation 'com.opencsv:opencsv:5.5.2'
+    implementation('org.eclipse.xtext:org.eclipse.xtext:2.25.0')
 }
 
 // Add JARs in folder 'libs' as dependencies

@@ -4,6 +4,7 @@ import pt.up.fe.els2021.Table;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 public final class MergeCombinator implements TableCombinator {
 
@@ -18,7 +19,10 @@ public final class MergeCombinator implements TableCombinator {
         var tableBRowCount = b.rowCount();
 
         var newColumnNames = new ArrayList<>(a.columnNames());
-        var newColumns = new ArrayList<>(a.columns());
+        var newColumns = new ArrayList<List<String>>();
+        for (var col : a.columns()) {
+            newColumns.add(new ArrayList<>(col));
+        }
         for (var colIx = 0; colIx < b.columns().size(); colIx++) {
             var columnName = b.columnNames().get(colIx);
             var column = b.columns().get(colIx);

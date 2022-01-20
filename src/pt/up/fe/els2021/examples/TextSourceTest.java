@@ -1,6 +1,9 @@
-    package pt.up.fe.els2021;
+package pt.up.fe.els2021.examples;
 
-import pt.up.fe.els2021.internal.DSL.*;
+import pt.up.fe.els2021.internal.DSL.Combinators;
+import pt.up.fe.els2021.internal.DSL.Exporters;
+import pt.up.fe.els2021.internal.DSL.Functions;
+import pt.up.fe.els2021.internal.DSL.Sources;
 import pt.up.fe.els2021.sources.TableSource;
 
 import static pt.up.fe.els2021.internal.DSL.combine;
@@ -10,8 +13,8 @@ public class TextSourceTest {
     public static void main(String[] args) throws Exception {
 
         var gprof = Sources.text(
-                "%", "name",  7, 2, " "
-        ).withFile("**/examples/checkpoint2/*/gprof.txt")
+                        "%", "name", 7, " "
+                ).withFile("**/examples/checkpoint2/*/gprof.txt")
                 .withInclude(TableSource.Include.FOLDER, "Folder")
                 .importTable();
         gprof = Functions.select()
