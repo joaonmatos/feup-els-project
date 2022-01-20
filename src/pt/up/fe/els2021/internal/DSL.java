@@ -37,13 +37,12 @@ public class DSL {
         public static TextSource.Builder text(
                 String startToken,
                 String endToken,
-                int height,
                 int width,
                 int headerSize,
                 String separator
         ) {
             return new TextSource.Builder(
-                    startToken, endToken, height, width, headerSize, separator
+                    startToken, endToken, width, headerSize, separator
             );
         }
     }
