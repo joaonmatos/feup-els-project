@@ -5,6 +5,7 @@ import pt.up.fe.els2021.commands.Command;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class Program {
     private final List<Command> commands;
@@ -21,5 +22,10 @@ public final class Program {
         }
     }
 
+    public void run(Map<String, Table> externalState) throws Exception {
+        for (var command : commands) {
+            command.apply(externalState);
+        }
+    }
 
 }

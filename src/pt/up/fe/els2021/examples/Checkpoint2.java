@@ -23,7 +23,7 @@ public class Checkpoint2 {
 
         var gprof = Sources.text(
                         "%", "matrix_mulv3_tdtdptd",
-                7, 2, " "
+                7, " "
                 ).withFile("**/examples/checkpoint2/*/gprof.txt")
                 .withInclude(TableSource.Include.FOLDER, "Folder")
                 .importTable();

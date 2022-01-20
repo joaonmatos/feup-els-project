@@ -16,21 +16,18 @@ public final class TextSource extends TableSource {
     private final String startToken;
     private final String endToken;
     private final int width;
-    private final int headersize;
-    // private final ArrayList<String> columns; includes
     private final String separator;
 
     @JsonCreator
     public TextSource(@JsonProperty("includes") Map<Include, String> includes,
                       @JsonProperty("files") List<String> files, @JsonProperty("startToken") String beg,
                       @JsonProperty("endToken") String end, @JsonProperty("width") int width,
-                      @JsonProperty("headersize") int headersize, @JsonProperty("separator") String separator) {
+                      @JsonProperty("separator") String separator) {
 
         super(includes, files);
         this.startToken = beg;
         this.endToken = end;
         this.width = width;
-        this.headersize = headersize;
         this.separator = separator;
     }
 
@@ -52,7 +49,7 @@ public final class TextSource extends TableSource {
             while (iterator.hasNext()) {
                 line = iterator.next();
                 if (headerComplete && line.isBlank()) {
-                    table = getColumns(header, body, headersize, width, separator);
+                    table = getColumns(header, body, width, separator);
                     break;
                 }
 
@@ -81,35 +78,14 @@ public final class TextSource extends TableSource {
         }
     }
 
-    public static boolean checkTable(ArrayList<List<String>> table, int height, int widht, int header) {
-        if (table.size() < header + 1 || table.size() > height + header) {
-            return false;
-        }
-
-        for (List<String> line : table) {
-            if (line.size() > widht) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private List<List<String>> getColumns(ArrayList<char[]> tableHeader, ArrayList<char[]> tableBody, int headerSize,
-                                          int width, String separator) {
+    private List<List<String>> getColumns(
+            ArrayList<char[]> tableHeader,
+            ArrayList<char[]> tableBody,
+            int width,
+            String separator
+    ) {
 
 
-        var newTable = getTable(tableHeader, tableBody, width, headerSize, separator);
-
-        for (var header : newTable) {
-            // System.out.println("header - " + header.toString());
-        }
-
-        return newTable;
-
-    }
-
-    private List<List<String>> getTable(ArrayList<char[]> tableHeader, ArrayList<char[]> tableBody, int width,
-                                        int headerSize, String separator) {
         List<List<String>> table = new ArrayList<>();
         ArrayList<ArrayList<int[]>> indexes = new ArrayList<>();
 
@@ -182,6 +158,7 @@ public final class TextSource extends TableSource {
         }
 
         return table;
+
     }
 
     private int getIndexOfLine(int index, ArrayList<int[]> limits) {
@@ -289,22 +266,18 @@ public final class TextSource extends TableSource {
         private final String startToken;
         private final String endToken;
         private final int width;
-        private final int headersize;
-        // private final ArrayList<String> columns;
         private final String separator;
 
-        public Builder(String beg, String end, int width, int headersize, String separator) {
+        public Builder(String beg, String end, int width, String separator) {
             this.startToken = beg;
             this.endToken = end;
             this.width = width;
-            this.headersize = headersize;
-            // this.columns = columns;
             this.separator = separator;
         }
 
         @Override
         public TableSource build() {
-            return new TextSource(includes, files, startToken, endToken, width, headersize, separator);
+            return new TextSource(includes, files, startToken, endToken, width, separator);
         }
     }
 
@@ -319,61 +292,3 @@ public final class TextSource extends TableSource {
         return newTable; }
 
 }
-
-/*
- * private Table parser(String fileContent) throws Exception { try (var
- * inputString = new StringReader(fileContent); var reader = new
- * BufferedReader(inputString)) { var iterator = reader.lines().iterator(); var
- * file = new ArrayList<List<String>>(); var firstLine = false; var ending =
- * false;
- *
- * while (iterator.hasNext()) { var line = iterator.next();
- *
- * if (!firstLine) { if (line.trim().startsWith(this.startToken)) { firstLine =
- * true;
- *
- * List<String> trimedLine = Arrays.asList(line.trim().replaceAll(" +",
- * " ").split(separator)); if(trimedLine.size() == width){ file.add(trimedLine);
- * }else{ fixFileLine(line); } } } else { ending = line.endsWith(this.endToken);
- * List<String> trimedLine = Arrays.asList(line.trim().replaceAll(" +",
- * " ").split(separator)); if(trimedLine.size() == width){ file.add(trimedLine);
- * } else { fixFileLine(line); }
- *
- * if (ending) { if (checkTable(file, height, width, headersize)) { return
- * getColumns(file, headersize); } else { firstLine = false; } } } } throw new
- * Exception("TextSource: did not find end of table"); } }
- *
- * private void fixFileLine(String line) { for (: ) {
- *
- * } }
- *
- * public boolean checkTable(ArrayList<List<String>> table, int height, int
- * width, int header) { if (table.size() < header + 1 || table.size() > height +
- * header) { return false; }
- *
- * for (var line : table) { if (line.size() > width) { return false; } } return
- * true; }
- *
- * public Table getColumns(ArrayList<List<String>> table, int headerSize) {
- *
- * var fileHeaders = table.subList(0, headerSize); var header = new
- * ArrayList<>(fileHeaders.get(0));
- *
- * // merge header for (int i = 1; i < headerSize; i++) { int tempHeaderSize =
- * header.size(); for (int j = 0; j < fileHeaders.get(i).size(); j++) { if
- * (tempHeaderSize > j) { String temp = header.get(j); header.set(j, temp + " "
- * + fileHeaders.get(i).get(j)); } else { header.add(fileHeaders.get(i).get(j));
- * } } }
- *
- * ArrayList<List<String>> newTable = new ArrayList<>() { { add(header); } };
- *
- * newTable.addAll(table.subList(2, table.size()));
- *
- * var flipped = flipTable(newTable.subList(1, newTable.size()));
- *
- * return new Table(newTable.get(0), flipped);
- *
- * }
- */
-
-

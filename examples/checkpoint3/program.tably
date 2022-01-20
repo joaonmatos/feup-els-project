@@ -1,0 +1,83 @@
+xmls = import "**/examples/checkpoint3/data/*/analysis.xml" {
+    with xml "//total//static"
+    include {
+        folder "Folder"
+    }
+}
+
+xmls = transform xmls {
+    rename "nodes" to "Nodes (Static)"
+    rename "functions" to "Functions (Static)"
+}
+
+jsons = import "**/examples/checkpoint3/data/*/analysis.json" {
+    with json "/total/results/dynamic"
+    include {
+        folder "Folder"
+    }
+}
+
+jsons = transform jsons {
+    rename "iterations" to "Iterations (Dynamic)"
+    rename "calls" to "Calls (Dynamic)"
+}
+
+texts = import "**/examples/checkpoint3/data/*/gprof.txt" {
+    with text {
+        startToken "%"
+        endToken "name"
+        width 7
+        separator ' '
+    }
+    include {
+        folder "Folder"
+    }
+}
+
+texts = transform texts {
+    select "Folder" "name" "%"
+    groupBy "Folder" in var out result {
+        text1 = transform var {
+            take 1 after 0
+            rename "name" to "Name #1"
+            rename "%" to "% #1"
+        }
+        text2 = transform var {
+            take 1 after 1
+            rename "name" to "Name #2"
+            rename "%" to "% #2"
+        }
+        text3 = transform var {
+            take 1 after 2
+            rename "name" to "Name #3"
+            rename "%" to "% #3"
+        }
+        result = combine {
+            with join "Folder"
+            tables text1 text2 text3
+        }
+    }
+}
+
+joined = combine {
+    with join "Folder"
+    tables xmls jsons texts
+}
+
+sums = transform joined {
+    aggregate sum
+    addColumn "Folder" "Sum"
+}
+
+avgs = transform joined {
+    aggregate average
+    addColumn "Folder" "Average"
+}
+
+final = combine {
+    with merge
+    tables joined sums avgs
+}
+
+export final with csv "output.csv"
+

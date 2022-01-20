@@ -13,7 +13,7 @@ import pt.up.fe.els2021.Table;
         @JsonSubTypes.Type(value = TrimFunction.class, name = "trim"),
         @JsonSubTypes.Type(value = MoveColumnFunction.class, name = "move")
 })
-public sealed interface TableFunction permits ExcludeFunction, MoveColumnFunction, OrderByFunction, RenameFunction, SelectFunction, TrimFunction {
+public sealed interface TableFunction permits AddColumnFunction, AggregatesFunction, ExcludeFunction, GroupByFunction, MoveColumnFunction, OrderByFunction, RenameFunction, SelectFunction, TrimFunction {
     Table apply(Table table) throws Exception;
 
     sealed abstract class Builder permits ExcludeFunction.Builder, OrderByFunction.Builder, SelectFunction.Builder, TrimFunction.Builder {
