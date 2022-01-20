@@ -1,0 +1,2 @@
+"Folder","DSP48E","FF","LUT","BRAM_18K","URAM","max_features_","meta","n_classes_","n_features_","n_outputs_","ccp_alpha","criterion","min_impurity_decrease","min_samples_leaf","min_samples_split","min_weight_fraction_leaf","splitter","% cumulative self self total time seconds seconds calls s/call s/call name"
+"run1","1","64","145","0","0","16","decision-tree","2","16","1","0","gini","0","1","2","0","best","99.39 1.62 1.62 8 0.20 0.20 matrix_mulv3_tdtdptd"
